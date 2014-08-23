@@ -22,6 +22,9 @@
 
 
     <!-- Story1 -->
+    
+    <string name="story1_text">Dies ist Story 1</string>
+    <string name="story1_button">Story 1 fortsetzen</string>
 
 
     <!-- Task2 -->
