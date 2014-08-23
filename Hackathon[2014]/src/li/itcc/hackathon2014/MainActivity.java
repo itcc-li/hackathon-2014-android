@@ -1,6 +1,7 @@
 
 package li.itcc.hackathon2014;
 
+import li.itcc.hackathon2014.Selfie.Logic;
 import li.itcc.hackathon2014.vaduztour.CompassFragment;
 import li.itcc.hackathon2014.vaduztour.HotColdFragment;
 import li.itcc.hackathon2014.vaduztour.IntroFragment;
@@ -12,6 +13,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -95,6 +97,9 @@ public class MainActivity extends Activity implements
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
+        }else if (id == R.id.action_selfie){
+            Logic x = new Logic(this, this);
+            Uri paths = x.TakePictureIntent();
         }
         return super.onOptionsItemSelected(item);
     }

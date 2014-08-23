@@ -3,6 +3,7 @@ package li.itcc.hackathon2014.Selfie;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -13,11 +14,12 @@ import android.net.Uri;
 import android.provider.MediaStore;
 
 public class Logic {
+    Activity activity;
+    Context context;
     
-    private SelfieFragment activity;
-    
-    public Logic(SelfieFragment selfieFragment){
-        activity = selfieFragment;
+    public Logic(Activity ac, Context con) {
+    activity = ac;    
+    context = con;
     }
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -29,12 +31,12 @@ public class Logic {
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE );
         intent.putExtra( MediaStore.EXTRA_OUTPUT, outputFileUri );
             
-        activity.getActivity().startActivityForResult( intent, 0 );
+        activity.startActivityForResult( intent, 0 );
     return outputFileUri;
     }
     
     private String saveToInternalSorage(Bitmap bitmapImage){
-        ContextWrapper cw = new ContextWrapper(activity.getActivity().getApplicationContext());
+        ContextWrapper cw = new ContextWrapper(activity.getApplicationContext());
          // path to /data/data/yourapp/app_data/imageDir
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
         // Create imageDir
