@@ -3,6 +3,8 @@ package li.itcc.hackathon2014;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.Button;
 
@@ -36,7 +38,4 @@ public abstract class AbstractTourFragment extends Fragment {
     public void setNextButton(Button nextButton) {
         
     }
-    
-    
-
-}
+  }

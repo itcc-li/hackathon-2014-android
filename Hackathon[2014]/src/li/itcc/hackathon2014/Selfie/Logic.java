@@ -3,46 +3,45 @@ package li.itcc.hackathon2014.Selfie;
 import java.io.File;
 
 import android.content.Intent;
-import android.hardware.Camera;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-public class Logic {
-    
+public class Logic extends SelfieFragment {
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int STATIC_RESULT=2; //positive > 0 integer.    
+    static final int RESULT_OK = 2;
+    Bitmap photo = null;
+
     private SelfieFragment activity;
     
     public Logic(SelfieFragment selfieFragment){
         activity = selfieFragment;
     }
-    static final int REQUEST_IMAGE_CAPTURE = 1;
 
+    
     public String TakePictureIntent() {
-        String _path = "data/data/li.itcc.hackathon2014.Selfie/";
-        File file = new File( _path );
+        String pfad = "data/data/li.itcc.hackathon2014.Selfie/";
+        File file = new File( pfad );
         Uri outputFileUri = Uri.fromFile( file );
-            
+        
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE );
         intent.putExtra( MediaStore.EXTRA_OUTPUT, outputFileUri );
-            
-        activity.startActivityForResult( intent, 0 );
-    return _path;
+        activity.startActivityForResult( intent, STATIC_RESULT );
+    return pfad;
     }
     
-    private Camera openFrontFacingCameraGingerbread() {
-        int cameraCount = 0;
-        Camera cam = null;
-        Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
-        cameraCount = Camera.getNumberOfCameras();
-        for ( int camIdx = 0; camIdx < cameraCount; camIdx++ ) {
-            Camera.getCameraInfo( camIdx, cameraInfo );
-            if ( cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT  ) {
-                try {
-                    cam = Camera.open( camIdx );
-                } catch (RuntimeException e) {
-                    //Log.e(TAG, "Camera failed to open: " + e.getLocalizedMessage());
-                }
-            }
-        }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+          if (requestCode == STATIC_RESULT) //check if the request code is the one you've sent
+          {
+                 if (resultCode == RESULT_OK) 
+                 {
+                 photo = (Bitmap) data.getExtras().get("data");     
+                 }
+                 else {
+                     }
+         }
+    }     
 
-        return cam;}
 }

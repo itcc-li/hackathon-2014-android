@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
@@ -157,6 +158,10 @@ public class MainActivity extends Activity implements
             super.onAttach(activity);
             ((MainActivity) activity).onSectionAttached(getArguments().getInt(
                     ARG_SECTION_NUMBER));
+        }
+        
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //    
         }
     }
 

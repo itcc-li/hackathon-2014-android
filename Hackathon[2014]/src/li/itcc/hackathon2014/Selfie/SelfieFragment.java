@@ -36,7 +36,7 @@ public class SelfieFragment extends AbstractTourFragment implements OnClickListe
         testButton.setOnClickListener(this);
         return rootView;
     
-    }
+    } 
    
 public void Photo(View view) {
 String paths = null;
