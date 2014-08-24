@@ -1,4 +1,3 @@
-
 package li.itcc.hackathon2014.Selfie;
 
 import java.io.BufferedInputStream;
