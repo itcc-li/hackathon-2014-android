@@ -100,6 +100,7 @@ public class MainActivity extends Activity implements
         }else if (id == R.id.action_selfie){
             Logic x = new Logic(this, this);
             Uri paths = x.TakePictureIntent();
+            x.addWatermark(paths.toString(), (int)R.drawable.ic_launcher);
         }
         return super.onOptionsItemSelected(item);
     }
