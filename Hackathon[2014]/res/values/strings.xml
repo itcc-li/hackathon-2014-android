@@ -153,4 +153,7 @@
 
     <!-- About ende -->
 
+    <string name="title_activity_filechooser">FilechooserActivity</string>
+    <string name="hello_world">Hello world!</string>
+
 </resources>
