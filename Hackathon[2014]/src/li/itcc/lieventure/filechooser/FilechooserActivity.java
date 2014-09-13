@@ -3,10 +3,12 @@ package li.itcc.lieventure.filechooser;
 
 import java.io.File;
 import java.util.ArrayList;
+
 import li.itcc.lieventure.R;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +19,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class FilechooserActivity extends Activity {
+
+    ArrayAdapter<String> Dateinamenadapter = null;
 
     /**
      * @param files (alle Files eines Verzeichnisses)
@@ -31,49 +35,22 @@ public class FilechooserActivity extends Activity {
         return fileList;
     }
 
-    public static void showFiles(File[] files) {
-        for (File file : files) {
-            if (file.isDirectory()) {
-
-                System.out.println("Directory: " + file.getName());
-            } else {
-                System.out.println("File: " + file.getName());
-            }
-        }
-    }
-
-    String[] values = new String[] {
-            "Test1",
-            "Test2",
-            "3",
-            "4",
-            "5",
-            "1234567890123456789012345678901234567890"
-    };
-
-    ListView list = null;
+    private ArrayList<String> FileListName = null; // Use setter
+    File[] FilesOfCurrentDirectory = null;
+    ArrayList<File[]> FilesOfOldDirectory = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        File rootDir = null;
-        File[] rootFiles = null;
-
+        FilesOfOldDirectory = new ArrayList<File[]>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filechooser);
+        File rootDir = new File(Environment.getExternalStorageDirectory().getPath());
+        setfilesOfCurrentDirectory(rootDir.listFiles());
+    }
 
-        rootDir = new File(Environment.getExternalStorageDirectory().getPath());
-        rootFiles = rootDir.listFiles();
-
-        ArrayList<String> FileListName = fromFileToString(rootFiles);
-
-        list = (ListView) findViewById(R.id.list);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, FileListName);
-
-        list.setAdapter(adapter);
-
+    private void createClickListener(final ListView listViewGUI) {
         // Item Click Listener
-        list.setOnItemClickListener(new OnItemClickListener() {
+        listViewGUI.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -83,17 +60,68 @@ public class FilechooserActivity extends Activity {
                 int itemPosition = position;
 
                 // ListView Clicked value
-                String itemValue = (String) list.getItemAtPosition(position);
+                String itemValue = (String) listViewGUI.getItemAtPosition(position);
+
+                // Clicked Item
+                File[] item = getfilesOfCurrentDirectory();
+                File check = item[itemPosition];
+
+                // getFileList of current Directory
 
                 // Show Alert
                 Toast.makeText(getApplicationContext(),
                         "Position :" + itemPosition + "  ListItem : " + itemValue,
                         Toast.LENGTH_LONG)
                         .show();
+
+                if (check.isDirectory()) {
+                    setfilesOfCurrentDirectory(check.listFiles());
+                    setFileListName(fromFileToString(getfilesOfCurrentDirectory()));
+                }
+
             }
 
         });
+    }
 
+    /**
+     * @return the fileListName
+     */
+    public ArrayList<String> getFileListName() {
+        return FileListName;
+    }
+
+    /**
+     * @param fileListName the fileListName to set
+     */
+    protected void setFileListName(ArrayList<String> fileListName) {
+        ListView list = null; // ListView on GUI
+
+        FileListName = fileListName;
+        list = (ListView) findViewById(R.id.list);
+        Dateinamenadapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, android.R.id.text1, FileListName);
+
+        list.setAdapter(Dateinamenadapter);
+        createClickListener(list);
+    }
+
+    /**
+     * @return the files
+     */
+    public File[] getfilesOfCurrentDirectory() {
+        return FilesOfCurrentDirectory;
+    }
+
+    /**
+     * @param files the files to set
+     */
+    public void setfilesOfCurrentDirectory(File[] filesOfCurrentDirectory) {
+        if (this.FilesOfCurrentDirectory != null) {
+            setFilesOfOldDirectory(this.FilesOfCurrentDirectory);
+        }
+        this.FilesOfCurrentDirectory = filesOfCurrentDirectory;
+        setFileListName(fromFileToString(getfilesOfCurrentDirectory()));
     }
 
     @Override
@@ -110,4 +138,28 @@ public class FilechooserActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+        Log.d("CDA", "onBackPressed Called");
+        setfilesOfCurrentDirectory(getFilesOfOldDirectory());
+    }
+
+    /**
+     * @return the filesOfOldDirectory
+     */
+    public File[] getFilesOfOldDirectory() {
+        int count = FilesOfOldDirectory.size() - 1;      
+                
+        return FilesOfOldDirectory.get(count);
+    }
+
+    /**
+     * @param filesOfOldDirectory the filesOfOldDirectory to set
+     */
+    public void setFilesOfOldDirectory(File[] filesOfOldDirectory) {
+        this.FilesOfOldDirectory.clear();
+        this.FilesOfOldDirectory.add(filesOfOldDirectory);
+    }
+
 }
