@@ -16,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class FilechooserActivity extends Activity {
 
@@ -37,6 +36,7 @@ public class FilechooserActivity extends Activity {
 
     private ArrayList<String> FileListName = null; // Use setter
     File[] FilesOfCurrentDirectory = null;
+    File CurrentDirectory = null;
     ArrayList<File[]> FilesOfOldDirectory = null;
 
     @Override
@@ -59,23 +59,14 @@ public class FilechooserActivity extends Activity {
                 // ListView Clicked index
                 int itemPosition = position;
 
-                // ListView Clicked value
-                String itemValue = (String) listViewGUI.getItemAtPosition(position);
-
                 // Clicked Item
                 File[] item = getfilesOfCurrentDirectory();
-                File check = item[itemPosition];
+                File directory = item[itemPosition];
+                setCurrentDirectory(directory);
 
-                // getFileList of current Directory
-
-                // Show Alert
-                Toast.makeText(getApplicationContext(),
-                        "Position :" + itemPosition + "  ListItem : " + itemValue,
-                        Toast.LENGTH_LONG)
-                        .show();
-
-                if (check.isDirectory()) {
-                    setfilesOfCurrentDirectory(check.listFiles());
+                // set new FileList
+                if (directory.isDirectory()) {
+                    setfilesOfCurrentDirectory(directory.listFiles());
                     setFileListName(fromFileToString(getfilesOfCurrentDirectory()));
                 }
 
@@ -149,8 +140,8 @@ public class FilechooserActivity extends Activity {
      * @return the filesOfOldDirectory
      */
     public File[] getFilesOfOldDirectory() {
-        int count = FilesOfOldDirectory.size() - 1;      
-                
+        int count = FilesOfOldDirectory.size() - 1;
+
         return FilesOfOldDirectory.get(count);
     }
 
@@ -160,6 +151,24 @@ public class FilechooserActivity extends Activity {
     public void setFilesOfOldDirectory(File[] filesOfOldDirectory) {
         this.FilesOfOldDirectory.clear();
         this.FilesOfOldDirectory.add(filesOfOldDirectory);
+    }
+
+    public void button_savePathClick(View v) {
+        String x = getCurrentDirectory().getPath();
+    }
+
+    /**
+     * @return the currentDirectory
+     */
+    public File getCurrentDirectory() {
+        return CurrentDirectory;
+    }
+
+    /**
+     * @param currentDirectory the currentDirectory to set
+     */
+    public void setCurrentDirectory(File currentDirectory) {
+        CurrentDirectory = currentDirectory;
     }
 
 }
