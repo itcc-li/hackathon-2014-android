@@ -70,8 +70,17 @@
 
                 <data android:mimeType="image/*" />
             </intent-filter>
-            -->
+-->
             </activity>
+        <activity
+            android:name="li.itcc.lieventure.filechooser.FilechooserActivity"
+            android:label="@string/title_activity_filechooser" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
